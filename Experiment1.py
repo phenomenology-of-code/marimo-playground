@@ -21,6 +21,45 @@ def _(mo):
 
 @app.cell
 def _():
+    import plotly.express as px
+
+    return (px,)
+
+
+@app.cell
+def _():
+    # Sample data: cities with coordinates
+    import polars as pl
+
+    cities = pl.DataFrame({
+        "city": ["New York", "Los Angeles", "Chicago", "Houston", "Phoenix"],
+        "lat": [40.7128, 34.0522, 41.8781, 29.7604, 33.4484],
+        "lon": [-74.0060, -118.2437, -87.6298, -95.3698, -112.0740],
+        "population": [8_336_817, 3_979_576, 2_693_976, 2_320_268, 1_680_992]
+    })
+    return (cities,)
+
+
+@app.cell
+def _(cities, px):
+    # Create a scatter map
+    fig = px.scatter_geo(
+        cities,
+        lat="lat",
+        lon="lon",
+        size="population",
+        hover_name="city",
+        scope="usa",
+        title="US Cities by Population",
+        size_max=30
+    )
+
+    fig.update_layout(geo=dict(bgcolor="rgba(0,0,0,0)"))
+    return
+
+
+@app.cell
+def _():
     def fizzbuzz(n):
         result = []
         for i in range(1, n + 1):
